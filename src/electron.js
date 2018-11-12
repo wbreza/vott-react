@@ -1,11 +1,12 @@
 const electron = require('electron');
+const path = require('path');
+const url = require('url');
+const menuTemplate = require('./menu.json');
+
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-
-const path = require('path');
-const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -13,7 +14,7 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 1920, height: 1080 });
+    mainWindow = new BrowserWindow({ width: 1024, height: 768 });
 
     // and load the index.html of the app.
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -21,9 +22,14 @@ function createWindow() {
         protocol: 'file:',
         slashes: true
     });
+
+    createMenu();
+
     mainWindow.loadURL(startUrl);
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
+
+    electron.ipcMain.on('MENU_ACTION', onMenuAction);
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -32,6 +38,43 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+}
+
+function createMenu() {
+    const template = [].concat(menuTemplate);
+    bindMenuActions(template);
+
+    const menu = electron.Menu.buildFromTemplate(template);
+    electron.Menu.setApplicationMenu(menu);
+}
+
+function onMenuAction(sender, args) {
+    switch (args.id) {
+        case 'developerConsole':
+            mainWindow.webContents.openDevTools();
+            break;
+        default:
+            console.log(`No handler found for ${args.id}`);
+            break;
+    }
+}
+
+function bindMenuActions(template) {
+    template.forEach(item => {
+        if (item.submenu) {
+            bindMenuActions(item.submenu);
+        }
+
+        if (item.id) {
+            item.click = () => {
+                if (item.target === 'renderer') {
+                    mainWindow.webContents.send('MENU_ACTION', item);
+                } else {
+                    require('electron').ipcMain.send('MENU_ACTION', item);
+                }
+            };
+        }
+    });
 }
 
 // This method will be called when Electron has finished

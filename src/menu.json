@@ -1,0 +1,149 @@
+[
+    {
+        "label": "File",
+        "submenu": [
+            {
+                "id": "open",
+                "label": "Open...",
+                "accelerator": "CmdOrCtrl+O"
+            },
+            {
+                "id": "openImageDirectory",
+                "label": "Open Image Directory...",
+                "accelerator": "CmdOrCtrl+I"
+            },
+            {
+                "id": "openTfDirectory",
+                "label": "Open tfRecord Directory...",
+                "accelerator": "CmdOrCtrl+R"
+            },
+            {
+                "id": "save",
+                "label": "Save",
+                "accelerator": "CmdOrCtrl+S",
+                "enabled": false
+            },
+            {
+                "id": "toggleTracking",
+                "label": "Toggle Tracking",
+                "accelerator": "CmdOrCtrl+T",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "label": "Object Detection",
+        "submenu": [
+            {
+                "id": "exportTags",
+                "label": "Export Tags",
+                "accelerator": "CmdOrCtrl+E",
+                "enabled": false
+            },
+            {
+                "id": "activeLearning",
+                "label": "Active Learning",
+                "accelerator": "CmdOrCtrl+L",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "label": "Edit",
+        "submenu": [
+            {
+                "id": "undo",
+                "label": "Undo",
+                "accelerator": "CmdOrCtrl+Z",
+                "selector": "undo:"
+            },
+            {
+                "id": "redo",
+                "label": "Redo",
+                "accelerator": "Shift+CmdOrCtrl+Z",
+                "selector": "redo:"
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "id": "cut",
+                "label": "Cut",
+                "accelerator": "CmdOrCtrl+X",
+                "selector": "cut:"
+            },
+            {
+                "id": "copy",
+                "label": "Copy",
+                "accelerator": "CmdOrCtrl+C",
+                "selector": "copy:"
+            },
+            {
+                "id": "paste",
+                "label": "Paste",
+                "accelerator": "CmdOrCtrl+V",
+                "selector": "paste:"
+            },
+            {
+                "id": "selectAll",
+                "label": "Select All",
+                "accelerator": "CmdOrCtrl+A",
+                "selector": "selectAll:"
+            }
+        ]
+    },
+    {
+        "label": "Filters",
+        "submenu": [
+            {
+                "label": "Add filter",
+                "submenu": [
+                    {
+                        "id": "invertFilter",
+                        "label": "Invert filter",
+                        "selector": "invert:"
+                    },
+                    {
+                        "id": "grayscaleFilter",
+                        "label": "Grayscale filter",
+                        "selector": "grayscale:"
+                    }
+                ]
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "id": "resetFilters",
+                "label": "Reset filters",
+                "selector": "resetFilters:"
+            }
+        ]
+    },
+    {
+        "label": "Debug",
+        "submenu": [
+            {
+                "id": "developerConsole",
+                "label": "Developer Console",
+                "accelerator": "CmdOrCtrl+D"
+            },
+            {
+                "id": "refreshApp",
+                "label": "Refresh App",
+                "accelerator": "CmdOrCtrl+Space"
+            }
+        ]
+    },
+    {
+        "label": "Help",
+        "submenu": [
+            {
+                "id": "keyboardShortcuts",
+                "label": "Keyboard Shortcuts",
+                "accelerator": "CmdOrCtrl+H",
+                "target": "renderer"
+            }
+        ]
+    }
+]
