@@ -1,19 +1,17 @@
-const electron = require('electron');
-const path = require('path');
-const url = require('url');
-const menuTemplate = require('./menu.json');
-
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+import { app, BrowserWindow, Menu } from 'electron';
+import path from 'path';
+import url from 'url';
+import menuTemplate from './menu.json';
+import Store from './store/store';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let store;
 
 function createWindow() {
     // Create the browser window.
+    store = Store.create();
     mainWindow = new BrowserWindow({ width: 1024, height: 768 });
 
     // and load the index.html of the app.
@@ -29,8 +27,6 @@ function createWindow() {
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 
-    electron.ipcMain.on('MENU_ACTION', onMenuAction);
-
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -44,19 +40,12 @@ function createMenu() {
     const template = [].concat(menuTemplate);
     bindMenuActions(template);
 
-    const menu = electron.Menu.buildFromTemplate(template);
-    electron.Menu.setApplicationMenu(menu);
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 }
 
-function onMenuAction(sender, args) {
-    switch (args.id) {
-        case 'developerConsole':
-            mainWindow.webContents.openDevTools();
-            break;
-        default:
-            console.log(`No handler found for ${args.id}`);
-            break;
-    }
+function onMenuAction(action) {
+    store.dispatch(action);
 }
 
 function bindMenuActions(template) {
@@ -66,11 +55,11 @@ function bindMenuActions(template) {
         }
 
         if (item.id) {
-            item.click = () => {
+            item.click = (menuItem, browserWindow, event) => {
                 if (item.target === 'renderer') {
-                    mainWindow.webContents.send('MENU_ACTION', item);
+                    browserWindow.webContents.send('MENU_ACTION', menuItem);
                 } else {
-                    require('electron').ipcMain.send('MENU_ACTION', item);
+                    onMenuAction({ type: item.action, menuItem, browserWindow, event });
                 }
             };
         }

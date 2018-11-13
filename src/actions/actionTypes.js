@@ -1,0 +1,2 @@
+export const TOGGLE_DEV_TOOLS = 'TOGGLE_DEV_TOOLS';
+export const OPEN_LOCAL_FOLDER = 'OPEN_LOCAL_FOLDER';
